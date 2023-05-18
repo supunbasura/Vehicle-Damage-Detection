@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AI Model Interface</title>
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(90deg, #a1c4fd 0%, #c2e9fb 100%);
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #FFF;
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+      margin-top: 40px;
+    }
+    
+    h1, h2 {
+      color: #333;
+    }
+    
+    .welcome-message {
+      font-size: 24px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    
+    .button {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #1e88e5;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-right: 10px;
+      box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+      transition: 0.3s all;
+    }
+    
+    .button:hover {
+      background-color: #1565c0;
+      transform: translateY(-2px);
+    }
+    
+    .progress-bar {
+      width: 100%;
+      background-color: #f1f1f1;
+      height: 20px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      margin-top: 20px;
+    }
+    
+    .progress {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #1e88e5 0%, #1565c0 100%);
+      border-radius: 4px;
+    }
+    
+    .image-upload {
+      margin: 20px 0;
+    }
+    
+    .image-preview {
+      max-width: 400px;
+      margin-bottom: 20px;
+    }
+    
+    .result-message {
+      font-size: 18px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    
+    .evaluation-results {
+      margin-top: 20px;
+      border-collapse: collapse;
+      width: 100%;
+    }
+    
+    .evaluation-results th, .evaluation-results td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    .back-button {
+      margin-top: 20px;
+    }
+    .button-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+      }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Screen 1: Home Screen -->
+    <div id="home-screen">
+      <h1 class="welcome-message">Damage Detection Panel</h1>
+      <div class="button-container">
+      <button class="button" onclick="showTrainScreen()">Train Model</button>
+      <button class="button" onclick="showTestScreen()">Test Model</button>
+      <button class="button" onclick="showEvaluateScreen()">Evaluate Model</button>
+      </div>
+    </div>
+    
+    <!-- Screen 2: Train Model Screen -->
+    <div id="train-screen" style="display: none;">
+      <h2>Train Model</h2>
+      <p id="train-status">Model not trained</p>
+      <div>
+      <button class="button" onclick="startTraining()">Start Training</button>
+      </div>
+      <div class="progress-bar">
+        <div id="progress" class="progress"></div>
+        <p id="progress-text"></p>
+      </div>
+      <button class="button back-button" onclick="showHomeScreen()">Back</button>
+    </div>
+    
+    <!-- Screen 3: Test Model Screen -->
+    <div id="test-screen" style="display: none;">
+      <h2>Test Model</h2>
+      <div class="image-upload">
+        <input type="file" id="image-upload" accept="image/*">
+        <button class="button" onclick="predictDamage()">Predict Damage</button>
+      </div>
+      <img id="image-preview" class="image-preview" src="#" alt="Preview
+" style="display: none;">
+<p id="prediction-result" class="result-message"></p>
+    <div>
+<label for="status-Bar">Amount of Damage:</label>
+<progress id="status-Bar" value="0" max="100"></progress>
+<p id="status-text"></p>
+        </div>
+<button class="button back-button" onclick="showHomeScreen()">Back</button>
+</div>
+
+
+<!-- Screen 4: Evaluate Model Screen -->
+<div id="evaluate-screen" style="display: none;">
+  <h2>Evaluate Model</h2>
+  <p id="evaluate-status">Evaluation not started</p>
+  <button class="button" onclick="startEvaluation()">Start Evaluation</button>
+  <table id="evaluation-results" class="evaluation-results"></table>
+  <button class="button back-button" onclick="showHomeScreen()">Back</button>
+</div>
+  </div>
+  <script>
+    function showTrainScreen() {
+      document.getElementById("home-screen").style.display = "none";
+      document.getElementById("train-screen").style.display = "block";
+    }
+    
+    function showTestScreen() {
+      document.getElementById("home-screen").style.display = "none";
+      document.getElementById("test-screen").style.display = "block";
+    }
+    
+    function showEvaluateScreen() {
+      document.getElementById("home-screen").style.display = "none";
+      document.getElementById("evaluate-screen").style.display = "block";
+    }
+    
+    function showHomeScreen() {
+      document.getElementById("train-screen").style.display = "none";
+      document.getElementById("test-screen").style.display = "none";
+      document.getElementById("evaluate-screen").style.display = "none";
+      document.getElementById("home-screen").style.display = "block";
+    }
+    
+    function startTraining() {
+      // Code to start model training
+      document.getElementById("train-status").textContent = "Model training...";
+      document.getElementById("progress").style.width = "0%";
+      // Simulate progress bar update for demonstration purposes
+      let width = 0;
+      let interval = setInterval(() => {
+        width++;
+        document.getElementById("progress").style.width = width + "%";
+        if (width >= 100) {
+          clearInterval(interval);
+          document.getElementById("train-status").textContent = "Model trained successfully";
+        }
+      }, 2000);
+    }
+    
+    function predictDamage() {
+      // Code to upload image and make prediction
+      const fileInput = document.getElementById("image-upload");
+      const imagePreview = document.getElementById("image-preview");
+      const resultMessage = document.getElementById("prediction-result");
+      
+      const statusBar = document.getElementById("status-Bar");
+      const statusText = document.getElementById("status-text");
+
+      const file = fileInput.files[0];
+      const reader = new FileReader();
+      
+      reader.onload = function (e) {
+        imagePreview.src = e.target.result;
+        imagePreview.style.display = "block";
+        resultMessage.textContent = "The car is damaged";
+
+        statusBar.value="89";
+        statusText.textContent="89%";
+
+      }
+      
+      reader.readAsDataURL(file);
+    }
+    
+    function startEvaluation() {
+      // Code to start model evaluation
+      document.getElementById("evaluate-status").textContent = "Evaluating...";
+      
+      // Simulate evaluation for demonstration purposes
+      setTimeout(() => {
+        document.getElementById("evaluate-status").textContent = "Evaluation completed";
+        
+        // Display evaluation results
+        const evaluationResults = document.getElementById("evaluation-results");
+        evaluationResults.innerHTML = `
+
+          <tr>
+            <th>Total params</th>
+            <td>21,137,729
+            </td>
+          </tr>
+          <tr>
+            <th>Trainable params</th>
+            <td>6,423,041</td>
+          </tr>
+          <tr>
+            <th>Non-trainable params
+            </th>
+            <td>14,714,688</td>
+          </tr>
+          <tr>
+            <tr>
+              <th>Accuracy</th>
+              <td>0.8387</td>
+            </tr>
+
+        `;
+      }, 2000);
+    }
+  </script>
+</body>
+</html>
